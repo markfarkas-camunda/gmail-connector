@@ -1,0 +1,151 @@
+{
+  "$schema": "https://unpkg.com/@camunda/zeebe-element-templates-json-schema/resources/schema.json",
+  "name": "Gmail email sender",
+  "id": "io.camunda.connector.sendmail.v1",
+  "description": "Send email using Gmail",
+  "version": 1,
+  "documentationRef": "https://docs.camunda.io/docs/components/connectors/out-of-the-box-connectors/available-connectors-overview/",
+  "icon": {
+    "contents": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjgwMCIgdmlld0JveD0iLTEzLjIgLTE2LjUwNDA1IDExNC40IDk5LjAyNDMiPjxwYXRoIGZpbGw9IiM0Mjg1ZjQiIGQ9Ik02IDY2LjAxNjJoMTR2LTM0bC0yMC0xNXY0M2MwIDMuMzE1IDIuNjg1IDYgNiA2eiIvPjxwYXRoIGZpbGw9IiMzNGE4NTMiIGQ9Ik02OCA2Ni4wMTYyaDE0YzMuMzE1IDAgNi0yLjY4NSA2LTZ2LTQzbC0yMCAxNXoiLz48cGF0aCBmaWxsPSIjZmJiYzA0IiBkPSJNNjggNi4wMTYydjI2bDIwLTE1di04YzAtNy40MTUtOC40NjUtMTEuNjUtMTQuNC03LjJ6Ii8+PHBhdGggZmlsbD0iI2VhNDMzNSIgZD0iTTIwIDMyLjAxNjJ2LTI2bDI0IDE4IDI0LTE4djI2bC0yNCAxOHoiLz48cGF0aCBmaWxsPSIjYzUyMjFmIiBkPSJNMCA5LjAxNjJ2OGwyMCAxNXYtMjZsLTUuNi00LjJjLTUuOTM1LTQuNDUtMTQuNC0uMjE1LTE0LjQgNy4yeiIvPjwvc3ZnPg=="
+  },
+  "category": {
+    "id": "connectors",
+    "name": "Connectors"
+  },
+  "appliesTo": [
+    "bpmn:Task"
+  ],
+  "elementType": {
+    "value": "bpmn:ServiceTask"
+  },
+  "groups": [
+    {
+      "id": "authentication",
+      "label": "Authentication"
+    },
+    {
+      "id": "compose",
+      "label": "Email"
+    },
+    {
+      "id": "output",
+      "label": "Output Mapping"
+    },
+    {
+      "id": "errors",
+      "label": "Error Handling"
+    }
+  ],
+  "properties": [
+    {
+      "type": "Hidden",
+      "value": "io.camunda:sendmail:1",
+      "binding": {
+        "type": "zeebe:taskDefinition:type"
+      }
+    },
+    {
+      "label": "Username",
+      "description": "The username for authentication.",
+      "group": "authentication",
+      "type": "String",
+      "feel": "optional",
+      "binding": {
+        "type": "zeebe:input",
+        "name": "authentication.user"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Password",
+      "description": "The password for authentication.",
+      "group": "authentication",
+      "type": "String",
+      "feel": "optional",
+      "binding": {
+        "type": "zeebe:input",
+        "name": "authentication.password"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Recipient",
+      "group": "compose",
+      "type": "String",
+      "feel": "optional",
+      "binding": {
+        "type": "zeebe:input",
+        "name": "recipient"
+      },
+      "constraints": {
+        "notEmpty": true,
+        "pattern": {
+          "value": "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])",
+          "message": "Must be a valid email."
+        }
+      }
+    },
+    {
+      "label": "Subject",
+      "group": "compose",
+      "type": "String",
+      "feel": "optional",
+      "binding": {
+        "type": "zeebe:input",
+        "name": "subject"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Message",
+      "group": "compose",
+      "type": "Text",
+      "feel": "optional",
+      "binding": {
+        "type": "zeebe:input",
+        "name": "message"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Result Variable",
+      "description": "Name of variable to store the response in",
+      "group": "output",
+      "type": "String",
+      "binding": {
+        "type": "zeebe:taskHeader",
+        "key": "resultVariable"
+      }
+    },
+    {
+      "label": "Result Expression",
+      "description": "Expression to map the response into process variables",
+      "group": "output",
+      "type": "Text",
+      "feel": "required",
+      "binding": {
+        "type": "zeebe:taskHeader",
+        "key": "resultExpression"
+      }
+    },
+    {
+      "label": "Error Expression",
+      "description": "Expression to handle errors. Details in the <a href=\"https://docs.camunda.io/docs/components/connectors/use-connectors/\" target=\"_blank\">documentation</a>.",
+      "group": "errors",
+      "type": "Text",
+      "feel": "required",
+      "binding": {
+        "type": "zeebe:taskHeader",
+        "key": "errorExpression"
+      }
+    }
+  ]
+}
